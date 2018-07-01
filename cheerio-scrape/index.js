@@ -1,9 +1,22 @@
 var request = require('request');
 var cheerio = require('cheerio');
+var mysql = require('mysql');
+
 var array = [];
 var final_arr = [];
 
+function storeResult(arr){
+    var con = mysql.createConnection({
+        host: "localhost",
+        user: "yourusername",
+        password: "yourpassword"
+    });
 
+    con.connect(function(err) {
+        if (err) throw err;
+        console.log("Connected!");
+    });
+}
 
 function parseArray(arr){
     let counter = 0;
@@ -50,9 +63,7 @@ function parseArray(arr){
             final_arr.push(row_obj);
             row_obj = new Object();
         }
-    }
-    console.log(final_arr);    
-    
+    }    
 }
 request('http://masternodes.online/', function(err, resp, html) {
     if (!err){
@@ -62,7 +73,5 @@ request('http://masternodes.online/', function(err, resp, html) {
             array.push(result);
         })
     }
-
     parseArray(array);
-
 });
